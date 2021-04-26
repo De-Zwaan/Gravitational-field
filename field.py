@@ -1,8 +1,8 @@
-from PIL import Image, ImageDraw
 import numpy as np
 import math
 import random as r
-import cl as cl
+import cl
+import cv2
 
 class planet:
     def __init__(self, x, y, mass, color):
@@ -12,32 +12,16 @@ class planet:
         self.c = color
 
 def createImage():
-    width = 1000
-    height = 1000
-    num_planets = 5
-
-
-    img = Image.new('RGB', (width, height), color = 'black')
-    draw = ImageDraw.Draw(img)
+    width = 255
+    height = 255
+    num_planets = 1
 
     planets = []
     for n in range(0, num_planets):
-        planets.append(planet(r.randint(0, width), r.randint(0, height), r.random()*100, (r.randint(100, 255), r.randint(100, 255), r.randint(100, 255))))
+        planets.append(planet(r.randint(0, width), r.randint(0, height), r.random()*100, (r.randint(100, 255), r.randint(100, 255), r.randint(100, 255), 255)))
 
+    print('starting computation')
     result = cl.compute(width, height, planets)
-
-    for i in range(0, width):
-        for j in range(0, height):
-            color = planets[int(result[j * width + i])].c
-            # print(color)
-            # print(color)
-            draw.point((i, j), fill = color)
-    
-    for p in planets:
-        # draw.ellipse([(p.x - p.m / 10, p.y - p.m / 10), (p.x + p.m / 10, p.y + p.m / 10)], fill = (255, 100, 255))
-        print()
-
-    del draw
-    img.save('./grav_field.png')
+    cv2.imwrite('./grav_field.png', result) # , cv2.COLOR_RGBA2RGB)
 
 createImage()
