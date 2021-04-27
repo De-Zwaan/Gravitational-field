@@ -45,6 +45,9 @@ def compute(width, height, planets):
     planet_mass_buf =   cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=planet_mass)
     planet_color_buf =  cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=planet_color)
     
+    # Buffer for the result
+    dest_buf =          cl.Buffer(ctx, mf.WRITE_ONLY, res.nbytes)
+
     # Build the program
     f = open('./compute.cl', 'r')
     prg = cl.Program(ctx, f.read()).build()
