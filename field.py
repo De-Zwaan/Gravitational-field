@@ -23,18 +23,19 @@ def getColor(h, s, v):
 def generatePlanets(width, height, num_planets, c, planets):
     i = r.randint(0, 360)
     
-    density = 10
+    density = 1000
+    r_scale = 2
     
     for n in range(0, num_planets):
         # Get a nice surface colour
         hue = r.randint(i*int(360 / num_planets), (i + 1)*int(360 / num_planets))
         i = i + 1
-        surface_color =     c(hue, 80, 75)
+        surface_color =     c(hue, 75, 75)
         field_color =       c(hue, 70, 70)
         
         # Generate a mass and a radius
         mass = r.random()
-        radius = (3 / (4 * math.pi) * mass * density)**(1/3)
+        radius = (3 / (4 * math.pi) * mass * density)**(1/3) * r_scale
         
         # Add the new planet to the array
         planets.append(planet(r.randint(0, width), r.randint(0, height), mass, radius, surface_color, field_color))
