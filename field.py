@@ -43,12 +43,14 @@ def generatePlanets(width, height, num_planets, c, planets):
     return planets
 
 def createImage(width, height, planets):
+    print("Started.")
     img = Image.new('RGB', (width, height), color = 'black')
 
     # Compute the color of every pixel
     result = cl.compute(width, height, planets)
 
     # Convert the resulting array into a picture
+    print("Converting...")
     img = Image.fromarray(result, 'RGB')
     draw = ImageDraw.Draw(img)
     
@@ -60,6 +62,7 @@ def createImage(width, height, planets):
 
     # Save the image
     img.save('./grav_field.png')
+    print("Saved...")
 
 # Dimensions of the final image
 width = 8192
