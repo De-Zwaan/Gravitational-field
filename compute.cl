@@ -2,8 +2,8 @@ __kernel void compute(const int width, const int height, __global const float *p
 {
     // const int i = get_global_id(0);
     
-    const int x = get_global_id(0);
-    const int y = get_global_id(1);
+    const int y = get_global_id(0);
+    const int x = get_global_id(1);
     const int z = get_global_id(2);
 
     // Set the start values for the comparison
@@ -21,12 +21,11 @@ __kernel void compute(const int width, const int height, __global const float *p
         }    
     }
 
-    if (max_planet_index == -1) {
-        // res[x][y] = [0, 0, 0];
-    }
+    // Convert x, y, z to an index
+    int index = y * 3 * width + x * 3 + z;
 
     // Return the planet with the highest influence on the current pixel
-    res[x, y, 0] = planet_color[max_planet_index, 0];
+    res[index] = planet_color[max_planet_index * 3 + z];
 }
 
 /*

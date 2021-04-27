@@ -17,7 +17,7 @@ def compute(width, height, planets):
             planet_color[i][j] =  planets[i].c[j]
     
     # array like a as output
-    res = np.zeros((width, height, 3), dtype=np.int32)
+    res = np.zeros((height, width, 3), dtype=np.uint8)
     
     # Establish context
     plat = cl.get_platforms()
