@@ -18,35 +18,39 @@ def getColor(h, s, v):
     # color = ImageColor.getrgb("hsl(" + str(r.randint(0, 360)) + ", " + str(50) +"%, " + str(75) + "%)")
     return ImageColor.getrgb("hsl(" + str(h) + ", " + str(s) +"%, " + str(v) + "%)")
 
-def createImage():
-    width = 1024
-    height = 1024
-    num_planets = r.randint(7, 15)
-
-
-    img = Image.new('RGB', (width, height), color = 'black')
-    draw = ImageDraw.Draw(img)
-
+def generatePlanets(width, height, num_planets, c):
+    # Initialise the planets in an array
     planets = []
     i = r.randint(0, 360)
-    for n in range(0, num_planets):
-        # color = (r.randint(100, 255), r.randint(100, 255), r.randint(100, 255))
-        color = getColor(r.randint(i*int(360 / num_planets), (i + 1)*int(360 / num_planets)), 75, 70)
-        # color = ImageColor.getrgb("hsl(" + str(r.randint(0, 360)) + ", " + str(50) +"%, " + str(75) + "%)")
-        planets.append(planet(r.randint(0, width), r.randint(0, height), r.random(), color))
-        i = i + 1
 
+    for n in range(0, num_planets):
+        # Get a nice colour
+        hue = r.randint(i*int(360 / num_planets), (i + 1)*int(360 / num_planets))
+        i = i + 1
+        color = c(hue, 70, 70)
+
+        # Add the new planet to the array
+        planets.append(planet(r.randint(0, width), r.randint(0, height), r.random(), color))
+
+    return planets
+
+def createImage(width, height, planets):
+    img = Image.new('RGB', (width, height), color = 'black')
+
+    # Compute the color of every pixel
     result = cl.compute(width, height, planets)
 
-    Image.fromarray(result)
+    # Convert the resulting array into a picture
+    img = Image.fromarray(result, 'RGB')
+    draw = ImageDraw.Draw(img)
     
     # Add dots on the image for the locations of the planets
     for p in planets:
         draw.ellipse([(p.x - p.r, p.y - p.r), (p.x + p.r, p.y + p.r)], fill = p.surf_color)
     
-    # for p in planets:
-        # draw.ellipse([(p.x - p.m / 10, p.y - p.m / 10), (p.x + p.m / 10, p.y + p.m / 10)], fill = (255, 100, 255))
     del draw
+
+    # Save the image
     img.save('./grav_field.png')
 
 createImage()
