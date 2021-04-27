@@ -10,14 +10,18 @@ def compute(width, height, planets):
     planet_x =          np.empty(len(planets)).astype(np.float32)
     planet_y =          np.empty_like(planet_x)
     planet_mass =       np.empty_like(planet_x)
-    # image_in = np.zeros(in_shape, dtype=np.int32)
+    planet_color =      np.empty((len(planets), 3)).astype(np.int32)
 
     # convert to 3 1d arrays
     for i in range(len(planets)):
-        planet_x[i] =           planets[i].x
-        planet_y[i] =           planets[i].y
-        planet_mass[i] =        planets[i].m 
-        # image_in[i][0] =        planets[i].c
+        planet_x[i] =       planets[i].x
+        planet_y[i] =       planets[i].y
+        planet_mass[i] =    planets[i].m
+        for j in range(3):
+            planet_color[i][j] =  planets[i].c[j]
+    
+    # array like a as output
+    res = np.zeros((height, width, 3), dtype=np.uint8)
     
     # Establish context
     platforms = cl.get_platforms() # a platform corresponds to a driver (e.g. AMD)
@@ -36,27 +40,22 @@ def compute(width, height, planets):
     in_shape = out_shape
     # Setup buffers
     mf = cl.mem_flags
-    # planet_x_buf =      cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=planet_x)
-    # planet_y_buf =      cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=planet_y)
-    # planet_mass_buf =   cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=planet_mass)
-    
-    image_in_buf =      cl.Image(ctx, mf.READ_ONLY, cl.ImageFormat(cl.channel_order.LUMINANCE, cl.channel_type.UNORM_INT8), shape=in_shape) 
-    image_out_buf =     cl.Image(ctx, mf.WRITE_ONLY, cl.ImageFormat(cl.channel_order.LUMINANCE, cl.channel_type.UNORM_INT8), shape=out_shape)
+    planet_x_buf =      cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=planet_x)
+    planet_y_buf =      cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=planet_y)
+    planet_mass_buf =   cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=planet_mass)
+    planet_color_buf =  cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=planet_color)
     
     # Build the program
-    prg = cl.Program(ctx, open('./compute.cl').read()).build()
+    f = open('./compute.cl', 'r')
+    prg = cl.Program(ctx, f.read()).build()
 
     # Run the program using the buffers
-    kernel = cl.Kernel(prg, 'compute') 
-    kernel.set_arg(0, image_in_buf) 
-    # kernel.set_arg(1, planet_x_buf) 
-    # kernel.set_arg(2, planet_y_buf)
-    # kernel.set_arg(3, planet_mass_buf)
-    kernel.set_arg(1, image_out_buf)
-
-    cl.enqueue_copy(queue, image_in_buf, image_in, origin=(0, 0), region=in_shape).wait()
-    cl.enqueue_nd_range_kernel(queue, kernel, out_shape, None, allow_empty_ndrange = True) 
-    cl.enqueue_copy(queue, image_out, image_out_buf, origin=(0, 0), region=out_shape).wait()
+    print("Computing...")
+    prg.compute(queue, res.shape, None, np.int32(width), np.int32(height), planet_x_buf, planet_y_buf, planet_mass_buf, planet_color_buf, dest_buf)
+    print("Done.")
     
+    # Get the result
+    cl.enqueue_copy(queue, res, dest_buf)
+
     # Return the result
-    return image_out
+    return res
