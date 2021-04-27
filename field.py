@@ -85,24 +85,24 @@ d_scale = 128
 r_scale = 1
 
 # List of a few massive bodies from the solar system
-# sun
-# planets.append(planet(width / 2, height / 2,                332900,     109 * r_scale / 5,          getColor(50, 80, 70),   (0, 0, 0)))
-# mercury
-# planets.append(planet(width / 2, height / 2 - 0.4 * scale,  0.055,      0.383 * r_scale,        getColor(205, 5, 65),   getColor(200, 10, 60)))
-# venus
-# planets.append(planet(width / 2, height / 2 - 0.7 * scale,  0.815,      0.950 * r_scale,        getColor(0, 0, 80),     getColor(0, 0, 70)))
-# earth
-# planets.append(planet(width / 2, height / 2 - 1.0 * scale,  1.000,      1.000 * r_scale,        getColor(205, 85, 80),  getColor(205, 80, 70)))
-# mars
-# planets.append(planet(width / 2, height / 2 - 1.5 * scale,  0.107,      0.533 * r_scale,        getColor(20, 95, 90),   getColor(25, 90, 80)))
-# jupiter
-# planets.append(planet(width / 2, height / 2 - 5.2 * scale,  318.0,      11.209 * r_scale,       getColor(25, 40, 75),   getColor(25, 40, 60)))
-# saturn
-# planets.append(planet(width / 2, height / 2 - 9.5 * scale,  95.00,      9.449 * r_scale,        getColor(50, 55, 80),   getColor(55, 40, 70)))
-# uranus
-# planets.append(planet(width / 2, height / 2 - 19.2 * scale, 14.00,      4.007 * r_scale,        getColor(180, 50, 95),  getColor(180, 45, 80)))
-# neptune
-# planets.append(planet(width / 2, height / 2 - 30.1 * scale, 17.00,      3.883 * r_scale,        getColor(210, 80, 85),  getColor(210, 70, 75)))
+# # sun
+# planets.append(planet(width / 2, height,                332900 / 100, 109 * r_scale / 5,      getColor(50, 80, 70),   (0, 0, 0))) # getColor(50, 70, 80)))
+# # mercury
+# planets.append(planet(width / 2, height - 0.4 * d_scale,  0.055,      0.383 * r_scale,        getColor(205, 5, 50),   getColor(200, 10, 60)))
+# # venus
+# planets.append(planet(width / 2, height - 0.7 * d_scale,  0.815,      0.950 * r_scale,        getColor(0, 0, 60),     getColor(0, 0, 70)))
+# # earth
+# planets.append(planet(width / 2, height - 1.0 * d_scale,  1.000,      1.000 * r_scale,        getColor(205, 85, 60),  getColor(205, 80, 70)))
+# # mars
+# planets.append(planet(width / 2, height - 1.5 * d_scale,  0.107,      0.533 * r_scale,        getColor(20, 95, 70),   getColor(25, 90, 80)))
+# # jupiter
+# planets.append(planet(width / 2, height - 5.2 * d_scale,  318.0,      11.209 * r_scale,       getColor(25, 40, 55),   getColor(25, 40, 60)))
+# # saturn
+# planets.append(planet(width / 2, height - 9.5 * d_scale,  95.00,      9.449 * r_scale,        getColor(50, 55, 60),   getColor(55, 40, 70)))
+# # uranus
+# planets.append(planet(width / 2, height - 19.2 * d_scale, 14.00,      4.007 * r_scale,        getColor(180, 50, 75),  getColor(180, 45, 80)))
+# # neptune
+# planets.append(planet(width / 2, height - 30.1 * d_scale, 17.00,      3.883 * r_scale,        getColor(210, 80, 85),  getColor(210, 70, 75)))
 
 # Create the image using the planets in the array
 createImage(width, height, planets)
