@@ -11,9 +11,9 @@ __kernel void compute(const int width, const int height, __global const float *p
     float max_planet_f = 0;
 
     // Loop over all the planets and calculate all the forces on the current pixel
-    for (int n = 0; n < sizeof(planet_mass); n++) {
+    for (int n = 0; n <= sizeof(planet_mass); n++) {
         // Avoid div0
-        // if (planet_x[n] == x && planet_y[n] == y) { max_planet_index = n; break; }
+        if (planet_x[n] == x && planet_y[n] == y) { max_planet_index = n; break; }
         
         // Calculate the force
         float f = planet_mass[n] / (pow(planet_x[n] - x, 2) + pow(planet_y[n] - y, 2));
@@ -25,6 +25,13 @@ __kernel void compute(const int width, const int height, __global const float *p
         }    
     }
 
+    float f_norm = max_planet_f * 1000;
+    if (f_norm < 0) {
+        f_norm = 0;
+    } else if (f_norm > 1) {
+        f_norm = 1;
+    }
+
     // Convert x, y, z to an index
     int index = y * 3 * width + x * 3 + z;
 
@@ -33,5 +40,5 @@ __kernel void compute(const int width, const int height, __global const float *p
     }
 
     // Return the planet with the highest influence on the current pixel
-    res[index] = planet_color[max_planet_index * 3 + z];
+    res[index] = planet_color[max_planet_index * 3 + z] * f_norm;
 }
