@@ -1,6 +1,5 @@
 import pyopencl as cl
 import numpy as np
-import cv2
 
 def compute(width, height, planets):
     # array with numbers as imput
