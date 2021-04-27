@@ -25,13 +25,6 @@ __kernel void compute(const int width, const int height, __global const float *p
         }    
     }
 
-    float f_norm = max_planet_f * 1000;
-    if (f_norm < 0) {
-        f_norm = 0;
-    } else if (f_norm > 1) {
-        f_norm = 1;
-    }
-
     // Convert x, y, z to an index
     int index = y * 3 * width + x * 3 + z;
 
@@ -40,5 +33,5 @@ __kernel void compute(const int width, const int height, __global const float *p
     }
 
     // Return the planet with the highest influence on the current pixel
-    res[index] = planet_color[max_planet_index * 3 + z] * f_norm;
+    res[index] = planet_color[max_planet_index * 3 + z];
 }
