@@ -2,10 +2,6 @@ import pyopencl as cl
 import numpy as np
 
 def compute(width, height, planets):
-    # array with numbers as imput
-
-    # in_shape = (len(planets), 1, 4)
-
     planet_x =          np.empty(len(planets)).astype(np.float32)
     planet_y =          np.empty_like(planet_x)
     planet_mass =       np.empty_like(planet_x)
@@ -29,14 +25,7 @@ def compute(width, height, planets):
     device = devices[0] # take first GPU
     ctx = cl.Context([device]) # put selected GPU into context object
     queue = cl.CommandQueue(ctx, device) # create command queue for selected GPU and context
-
-    # Get the shape from the input image
-    image_in = cv2.imread('./grav_field.png', cv2.IMREAD_COLOR)
-
-    out_shape = image_in.T.shape # (width, height, 4)
-    image_out = np.empty_like(image_in) # np.zeros(out_shape, dtype=np.int32)
-
-    in_shape = out_shape
+ 
     # Setup buffers
     mf = cl.mem_flags
     planet_x_buf =      cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=planet_x)
