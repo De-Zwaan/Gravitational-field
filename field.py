@@ -76,7 +76,7 @@ planets = []
 
 # Randomly create some beautiful planets
 # Comment out if you want to use your own planets
-planets = generatePlanets(width, height, 2, getColor)
+planets = generatePlanets(width, height, 7, getColor, planets)
 
 # Scales to display the different planets from out solar system at.
 # Scale of the distance to the sun
