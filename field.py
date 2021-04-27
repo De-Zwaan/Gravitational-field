@@ -65,7 +65,10 @@ r_scale = 1
 time = 1
 
 planets = []
-# planets = generatePlanets(width, height, 2, getColor, planets)
+
+# Randomly create some beautiful planets
+# Comment out if you want to use your own planets
+# planets = generatePlanets(width, height, 7, getColor, planets)
 
 # ------------------ CUSTOM PLANETS ----------------------------------
 # Scales to display the different planets from out solar system at.
