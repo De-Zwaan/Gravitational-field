@@ -1,7 +1,6 @@
-__kernel void compute(const int width, const int height, __global const float *planet_x, __global const float *planet_y, __global const float *planet_mass, __global const int *planet_color, __global uchar *res)
+__kernel void compute(const int f_mult, __global const float *planet_x, __global const float *planet_y, __global const float *planet_mass, __global const int *planet_color, __global uchar *res)
 {
-    // const int i = get_global_id(0);
-    
+    // Don't question why x and why are not normal, it just works this way 
     const int y = get_global_id(0);
     const int x = get_global_id(1);
     const int z = get_global_id(2);
@@ -25,20 +24,19 @@ __kernel void compute(const int width, const int height, __global const float *p
         }    
     }
 
-    float f_norm = max_planet_f * 1000;
-    if (f_norm < 0) {
-        f_norm = 0;
-    } else if (f_norm > 1) {
-        f_norm = 1;
-    }
-
     // Convert x, y, z to an index
-    int index = y * 3 * width + x * 3 + z;
+    int index = y * 3 * %d + x * 3 + z;
 
-    if (max_planet_index == -1) {
-        res[index] = 0;
+    float f_norm = max_planet_f * f_mult;
+    if (f_norm < 0) {
+        // Only possible if f_mult < 0 --> returns a flat image
+        f_norm = 1;
+    } else if (f_norm > 1) {
+        // Upper threshold, higher is not recommended
+        f_norm = 1;
     }
 
     // Return the planet with the highest influence on the current pixel
     res[index] = planet_color[max_planet_index * 3 + z] * f_norm;
+
 }

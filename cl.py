@@ -1,11 +1,17 @@
 import pyopencl as cl
 import numpy as np
+import math
 
-def compute(width, height, planets):
+def compute(width, height, planets, fade):
     planet_x =          np.empty(len(planets)).astype(np.float32)
     planet_y =          np.empty_like(planet_x)
     planet_mass =       np.empty_like(planet_x)
     planet_color =      np.empty((len(planets), 3)).astype(np.int32)
+
+    if fade:
+        f_mult = int(math.sqrt(width * height) * 50) # 50 is a good value - higher than 10000 if no fade is desired
+    else: 
+        f_mult = -1
 
     # convert to 3 1d arrays
     for i in range(len(planets)):
@@ -38,11 +44,11 @@ def compute(width, height, planets):
 
     # Build the program
     f = open('./compute.cl', 'r')
-    prg = cl.Program(ctx, f.read()).build()
+    prg = cl.Program(ctx, str(f.read()) % width).build()
 
     # Run the program using the buffers
     print("Computing...")
-    prg.compute(queue, res.shape, None, np.int32(width), np.int32(height), planet_x_buf, planet_y_buf, planet_mass_buf, planet_color_buf, dest_buf)
+    prg.compute(queue, res.shape, None, np.int32(f_mult), planet_x_buf, planet_y_buf, planet_mass_buf, planet_color_buf, dest_buf)
     print("Done.")
     
     # Get the result

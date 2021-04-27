@@ -42,12 +42,12 @@ def generatePlanets(width, height, num_planets, c, planets):
 
     return planets
 
-def createImage(width, height, planets):
+def createImage(width, height, planets, fade):
     print("Started.")
     img = Image.new('RGB', (width, height), color = 'black')
 
     # Compute the color of every pixel
-    result = cl.compute(width, height, planets)
+    result = cl.compute(width, height, planets, fade)
 
     # Convert the resulting array into a picture
     print("Converting...")
@@ -65,9 +65,12 @@ def createImage(width, height, planets):
     print("Saved...")
 
 # Dimensions of the final image
-width = 8192
-height = 8192
+width = 2048
+height = 2048
 
+# True if a fade is desired 
+# More settings can be found in ./cl.py
+fade = False
 
 time = 1
 
@@ -105,4 +108,4 @@ r_scale = 1
 # planets.append(planet(width / 2, height - 30.1 * d_scale, 17.00,      3.883 * r_scale,        getColor(210, 80, 85),  getColor(210, 70, 75)))
 
 # Create the image using the planets in the array
-createImage(width, height, planets)
+createImage(width, height, planets, fade)
