@@ -11,7 +11,7 @@ __kernel void compute(const int width, const int height, __global const float *p
     float max_planet_f = 0;
 
     // Loop over all the planets and calculate all the forces on the current pixel
-    for (int n = 0; n < sizeof(planet_mass); n++) {
+    for (int n = 0; n <= sizeof(planet_mass); n++) {
         // Avoid div0
         // if (planet_x[n] == x && planet_y[n] == y) { max_planet_index = n; break; }
         
