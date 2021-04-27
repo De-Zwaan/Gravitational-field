@@ -2,7 +2,6 @@ import pyopencl as cl
 import numpy as np
 
 def compute(width, height, planets):
-    # array with numbers as imput
     planet_x =          np.empty(len(planets)).astype(np.float32)
     planet_y =          np.empty_like(planet_x)
     planet_mass =       np.empty_like(planet_x)
@@ -20,14 +19,13 @@ def compute(width, height, planets):
     res = np.zeros((height, width, 3), dtype=np.uint8)
     
     # Establish context
-    plat = cl.get_platforms()
-    devices = plat[0].get_devices()
-    ctx = cl.Context([devices[0]])
-    ctx.get_info(cl.context_info.DEVICES)
-
-    # Create a queue
-    queue = cl.CommandQueue(ctx)
-
+    platforms = cl.get_platforms() # a platform corresponds to a driver (e.g. AMD)
+    platform = platforms[0] # take first platform
+    devices = platform.get_devices(cl.device_type.GPU) # get GPU devices of selected platform
+    device = devices[0] # take first GPU
+    ctx = cl.Context([device]) # put selected GPU into context object
+    queue = cl.CommandQueue(ctx, device) # create command queue for selected GPU and context
+ 
     # Setup buffers
     mf = cl.mem_flags
     planet_x_buf =      cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=planet_x)
@@ -35,7 +33,8 @@ def compute(width, height, planets):
     planet_mass_buf =   cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=planet_mass)
     planet_color_buf =  cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=planet_color)
     
-    dest_buf = cl.Buffer(ctx, mf.WRITE_ONLY, res.nbytes)
+    # Buffer for the result
+    dest_buf =          cl.Buffer(ctx, mf.WRITE_ONLY, res.nbytes)
 
     # Build the program
     f = open('./compute.cl', 'r')
