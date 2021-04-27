@@ -5,13 +5,17 @@ import random as r
 import cl as cl
 
 class planet:
-    def __init__(self, x, y, mass, color):
+    def __init__(self, x, y, mass, radius, surf_color, color):
         self.x = x
         self.y = y
         self.m = mass
+        self.surf_color = surf_color
         self.c = color
+        self.r = radius
 
 def getColor(h, s, v):
+    # color = (r.randint(100, 255), r.randint(100, 255), r.randint(100, 255))
+    # color = ImageColor.getrgb("hsl(" + str(r.randint(0, 360)) + ", " + str(50) +"%, " + str(75) + "%)")
     return ImageColor.getrgb("hsl(" + str(h) + ", " + str(s) +"%, " + str(v) + "%)")
 
 def createImage():
@@ -36,10 +40,9 @@ def createImage():
 
     Image.fromarray(result)
     
-    # for i in range(0, width):
-    #     for j in range(0, height):
-    #         color = planets[int(result[j * width + i])].c
-    #         draw.point((i, j), fill = color)
+    # Add dots on the image for the locations of the planets
+    for p in planets:
+        draw.ellipse([(p.x - p.r, p.y - p.r), (p.x + p.r, p.y + p.r)], fill = p.surf_color)
     
     # for p in planets:
         # draw.ellipse([(p.x - p.m / 10, p.y - p.m / 10), (p.x + p.m / 10, p.y + p.m / 10)], fill = (255, 100, 255))
