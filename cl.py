@@ -42,12 +42,12 @@ def compute(width, height, planets):
     prg = cl.Program(ctx, f.read()).build()
 
     # Run the program using the buffers
+    print("Computing...")
     prg.compute(queue, res.shape, None, np.int32(width), np.int32(height), planet_x_buf, planet_y_buf, planet_mass_buf, planet_color_buf, dest_buf)
-
+    print("Done.")
+    
     # Get the result
     cl.enqueue_copy(queue, res, dest_buf)
 
-    # Print the result
-
-    print(res)
+    # Return the result
     return res

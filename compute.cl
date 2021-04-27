@@ -1,4 +1,4 @@
-__kernel void compute(const int width, const int height, __global const float *planet_x, __global const float *planet_y, __global const float *planet_mass, __global const int2 *planet_color, __global int3 *res)
+__kernel void compute(const int width, const int height, __global const float *planet_x, __global const float *planet_y, __global const float *planet_mass, __global const int *planet_color, __global uchar *res)
 {
     // const int i = get_global_id(0);
     
@@ -12,6 +12,7 @@ __kernel void compute(const int width, const int height, __global const float *p
 
     // Loop over all the planets and calculate all the forces on the current pixel
     for (int n = 0; n < sizeof(planet_mass); n++) {
+        // Calculate the force
         float f = planet_mass[n] / (pow(planet_x[n] - x, 2) + pow(planet_y[n] - y, 2));
 
         // Get the highest force
@@ -24,8 +25,13 @@ __kernel void compute(const int width, const int height, __global const float *p
     // Convert x, y, z to an index
     int index = y * 3 * width + x * 3 + z;
 
+    if (max_planet_index == -1) {
+        res[index] = 0;
+    }
+
     // Return the planet with the highest influence on the current pixel
     res[index] = planet_color[max_planet_index * 3 + z];
+    // printf("index: %d \tx: %d \ty: %d \tres: %d \tmax_plan: %d", index, x, y, res[index], max_planet_index);
 }
 
 /*
