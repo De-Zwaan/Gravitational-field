@@ -5,7 +5,7 @@ Pillow == 9.0.0
 
 # Gravitational field/cl.py: 2
 # Gravitational field/field.py: 2
-numpy == 1.20.4
+numpy == 1.21.0
 
 # Gravitational field/cl.py: 1
 pyopencl == 2021.1.6
