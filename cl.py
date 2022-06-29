@@ -19,12 +19,12 @@ def compute(width, height, planets):
     res = np.zeros((height, width, 3), dtype=np.uint8)
     
     # Establish context
-    platforms = cl.get_platforms() # a platform corresponds to a driver (e.g. AMD)
-    platform = platforms[0] # take first platform
-    devices = platform.get_devices(cl.device_type.GPU) # get GPU devices of selected platform
-    device = devices[0] # take first GPU
-    ctx = cl.Context([device]) # put selected GPU into context object
-    queue = cl.CommandQueue(ctx, device) # create command queue for selected GPU and context
+    platforms = cl.get_platforms()                          # a platform corresponds to a driver (e.g. AMD)
+    platform = platforms[0]                                 # take first platform
+    devices = platform.get_devices(cl.device_type.GPU)      # get GPU devices of selected platform
+    device = devices[0]                                     # take first GPU
+    ctx = cl.Context([device])                              # put selected GPU into context object
+    queue = cl.CommandQueue(ctx, device)                    # create command queue for selected GPU and context
  
     # Setup buffers
     mf = cl.mem_flags

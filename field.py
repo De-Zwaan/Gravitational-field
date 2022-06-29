@@ -30,6 +30,7 @@ def generatePlanets(width, height, num_planets, c, planets):
         # Get a nice surface colour
         hue = r.randint(i*int(360 / num_planets), (i + 1)*int(360 / num_planets))
         i = i + 1
+
         surface_color =     c(hue, 75, 75)
         field_color =       c(hue, 70, 70)
         
@@ -76,7 +77,9 @@ planets = []
 
 # Randomly create some beautiful planets
 # Comment out if you want to use your own planets
-planets = generatePlanets(width, height, 7, getColor, planets)
+planets = generatePlanets(width, height, 8, getColor, planets)
+
+# planets.append(planet(width/2, height/2, 1, 1, getColor(255, 255, 255), getColor(255, 255, 255)))
 
 # Scales to display the different planets from out solar system at.
 # Scale of the distance to the sun
