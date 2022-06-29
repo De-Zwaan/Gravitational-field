@@ -1,4 +1,4 @@
-from PIL import Image, ImageColor, ImageDraw
+from PIL import Image, ImageColor
 import numpy as np
 import math
 import random as r
@@ -45,30 +45,36 @@ def generatePlanets(width, height, num_planets, c, planets):
 
 def createImage(width, height, planets):
     print("Started.")
-    img = Image.new('RGB', (width, height), color = 'black')
 
     # Compute the color of every pixel
-    result = cl.compute(width, height, planets)
+    result_BW =      cl.BWcompute(width, height, planets)
+    result_Color =   cl.colorCompute(width, height, planets)
+
+    result_color_weird = np.empty_like(result_BW)
+
+    # Calculating the colors based on the brightness of the BW image
+    print("Calculating...")
+    # for i, x in np.ndenumerate(result_BW):
+    #     result_color_weird[i[0]][i[1]] = getColor(x / 255 * 360, 70, 70)
 
     # Convert the resulting array into a picture
     print("Converting...")
-    img = Image.fromarray(result, 'RGB')
-    draw = ImageDraw.Draw(img)
-    
-    # Add dots on the image for the locations of the planets
-    for p in planets:
-        draw.ellipse([(p.x - p.r, p.y - p.r), (p.x + p.r, p.y + p.r)], fill = p.surf_color)
-    
-    del draw
+    img_BW =    Image.fromarray(result_BW, 'RGB')
+    img_Color = Image.fromarray(result_Color, 'RGB')
+
+    img_weird = Image.blend(img_Color, img_BW, 0.5)
+    img_color_weird = Image.fromarray(result_color_weird, 'RGB')
 
     # Save the image
-    img.save('./grav_field.png')
+    img_BW.save('./grav_field_BW.png')
+    img_Color.save('./grav_field_color.png')
+    img_weird.save('./grav_field_weird.png')
+    img_color_weird.save('./grav_field_color_weird.png')
     print("Saved...")
 
 # Dimensions of the final image
-width = 8192
-height = 8192
-
+width = 2048
+height = 2048
 
 time = 1
 
